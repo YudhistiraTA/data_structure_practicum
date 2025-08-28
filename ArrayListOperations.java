@@ -15,24 +15,22 @@ class ArrayListOperations implements IIterable {
     }
 
     @Override
-    public IIterable traverse() {
+    public void traverse() {
         for (int v : list) {
             System.out.printf("%d ", v);
         }
         System.out.println();
-        return this;
     }
 
     @Override
-    public IIterable suppressedTraverse() {
+    public void suppressedTraverse() {
         for (int _ : list) {
             // no-op
         }
-        return this;
     }
 
     @Override
-    public IIterable insert(int index, int v) {
+    public void insert(int index, int v) {
         if (index < 0 || index > list.size())
             throw new IndexOutOfBoundsException("Index out of bounds");
         list.add(index, v);
@@ -40,11 +38,20 @@ class ArrayListOperations implements IIterable {
         // Due to arbitrary insertion,
         // the array is no longer guaranteed to be sorted
         sorted = false;
-        return this;
     }
 
     @Override
-    public IIterable smartInsert(int v) {
+    public void delete(int index) {
+        if (index < 0 || index >= list.size())
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        list.remove(index);
+
+        // Deletion should not change the order of elements
+        // No change to this.sorted
+    }
+
+    @Override
+    public void smartInsert(int v) {
         if (!sorted) {
             sort();
         }
@@ -56,14 +63,12 @@ class ArrayListOperations implements IIterable {
 
         // List is guaranteed to be sorted
         sorted = true;
-        return this;
     }
 
     @Override
-    public IIterable sort() {
+    public void sort() {
         java.util.Collections.sort(list);
         sorted = true;
-        return this;
     }
 
     @Override

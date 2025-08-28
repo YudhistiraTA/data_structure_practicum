@@ -3,6 +3,7 @@ class Comparison {
     private static enum TestType {
         TRAVERSE,
         INSERT,
+        DELETE,
         SORT,
         SMART_INSERT,
         LINEAR_SEARCH,
@@ -63,6 +64,7 @@ class Comparison {
                 int finalValue = data.finalValue(); // Get final value for search tests
                 timeOperation(() -> data.suppressedTraverse(), TestType.TRAVERSE.ordinal());
                 timeOperation(() -> data.insert(size / 2, 50), TestType.INSERT.ordinal());
+                timeOperation(() -> data.delete(size / 2), TestType.DELETE.ordinal());
                 timeOperation(() -> data.sort(), TestType.SORT.ordinal());
                 timeOperation(() -> data.smartInsert(50), TestType.SMART_INSERT.ordinal());
                 timeOperation(() -> data.linearSearch(finalValue), TestType.LINEAR_SEARCH.ordinal());

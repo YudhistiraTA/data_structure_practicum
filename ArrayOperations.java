@@ -13,24 +13,22 @@ class ArrayOperations implements IIterable {
     }
 
     @Override
-    public IIterable traverse() {
+    public void traverse() {
         for (int v : array) {
             System.out.printf("%d ", v);
         }
         System.out.println();
-        return this;
     }
 
     @Override
-    public IIterable suppressedTraverse() {
+    public void suppressedTraverse() {
         for (int _ : array) {
             // no-op
         }
-        return this;
     }
 
     @Override
-    public IIterable insert(int index, int v) {
+    public void insert(int index, int v) {
         if (index < 0 || index > array.length)
             throw new ArrayIndexOutOfBoundsException("Index out of bounds");
 
@@ -46,11 +44,26 @@ class ArrayOperations implements IIterable {
         // Due to arbitrary insertion,
         // the array is no longer guaranteed to be sorted
         sorted = false;
-        return this;
     }
 
     @Override
-    public IIterable smartInsert(int v) {
+    public void delete(int index) {
+        if (index < 0 || index >= array.length)
+            throw new ArrayIndexOutOfBoundsException("Index out of bounds");
+
+        // Clone array with decreased size
+        int[] newArray = new int[array.length - 1];
+        System.arraycopy(array, 0, newArray, 0, index);
+        // Skip the deleted index
+        System.arraycopy(array, index + 1, newArray, index, array.length - index - 1);
+        array = newArray;
+
+        // Deletion should not change the order of elements
+        // No change to this.sorted
+    }
+
+    @Override
+    public void smartInsert(int v) {
         if (!sorted)
             sort();
         int[] newArray = new int[array.length + 1];
@@ -69,17 +82,15 @@ class ArrayOperations implements IIterable {
 
         // Array is guaranteed to be sorted
         sorted = true;
-        return this;
     }
 
     @Override
-    public IIterable sort() {
+    public void sort() {
         // Avoid operation if already sorted
         if (!sorted) {
             java.util.Arrays.sort(array);
             sorted = true;
         }
-        return this;
     }
 
     @Override

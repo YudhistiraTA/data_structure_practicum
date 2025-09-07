@@ -16,7 +16,6 @@ class ArrayOperations implements IIterable {
         }
     }
 
-    @Override
     public void traverse() {
         for (int i = 0; i < size; i++) {
             System.out.print(array[i] + " ");
@@ -24,7 +23,6 @@ class ArrayOperations implements IIterable {
         System.out.println();
     }
 
-    @Override
     public void suppressedTraverse() {
         for (int i = 0; i < size; i++) {
             // no-op
@@ -38,7 +36,6 @@ class ArrayOperations implements IIterable {
         array = newArray;
     }
 
-    @Override
     public void insert(int index, int v) {
         if (index < 0 || index > size)
             throw new ArrayIndexOutOfBoundsException("Index out of bounds");
@@ -53,7 +50,6 @@ class ArrayOperations implements IIterable {
         sorted = false;
     }
 
-    @Override
     public void delete(int index) {
         if (index < 0 || index >= size)
             throw new ArrayIndexOutOfBoundsException("Index out of bounds");
@@ -64,7 +60,6 @@ class ArrayOperations implements IIterable {
         // No change to this.sorted
     }
 
-    @Override
     public void smartInsert(int v) {
         if (!sorted)
             sort();
@@ -81,7 +76,6 @@ class ArrayOperations implements IIterable {
         sorted = true;
     }
 
-    @Override
     public void sort() {
         // Avoid operation if already sorted
         if (!sorted) {
@@ -90,7 +84,6 @@ class ArrayOperations implements IIterable {
         }
     }
 
-    @Override
     public int linearSearch(int v) {
         for (int i = 0; i < size; i++) {
             if (array[i] == v) {
@@ -100,7 +93,6 @@ class ArrayOperations implements IIterable {
         return -1;
     }
 
-    @Override
     public int binarySearch(int v) {
         if (!sorted)
             sort();
@@ -109,7 +101,6 @@ class ArrayOperations implements IIterable {
         return index >= 0 ? index : -1;
     }
 
-    @Override
     public int finalValue() {
         return array[size - 1];
     }

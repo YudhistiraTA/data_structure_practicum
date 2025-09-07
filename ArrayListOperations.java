@@ -14,7 +14,6 @@ class ArrayListOperations implements IIterable {
         }
     }
 
-    @Override
     public void traverse() {
         for (int v : list) {
             System.out.printf("%d ", v);
@@ -22,14 +21,12 @@ class ArrayListOperations implements IIterable {
         System.out.println();
     }
 
-    @Override
     public void suppressedTraverse() {
         for (int _ : list) {
             // no-op
         }
     }
 
-    @Override
     public void insert(int index, int v) {
         if (index < 0 || index > list.size())
             throw new IndexOutOfBoundsException("Index out of bounds");
@@ -40,7 +37,6 @@ class ArrayListOperations implements IIterable {
         sorted = false;
     }
 
-    @Override
     public void delete(int index) {
         if (index < 0 || index >= list.size())
             throw new IndexOutOfBoundsException("Index out of bounds");
@@ -50,7 +46,6 @@ class ArrayListOperations implements IIterable {
         // No change to this.sorted
     }
 
-    @Override
     public void smartInsert(int v) {
         if (!sorted) {
             sort();
@@ -65,13 +60,11 @@ class ArrayListOperations implements IIterable {
         sorted = true;
     }
 
-    @Override
     public void sort() {
         java.util.Collections.sort(list);
         sorted = true;
     }
 
-    @Override
     public int linearSearch(int v) {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i) == v) {
@@ -81,7 +74,6 @@ class ArrayListOperations implements IIterable {
         return -1;
     }
 
-    @Override
     public int binarySearch(int v) {
         if (!sorted)
             sort();
@@ -89,7 +81,6 @@ class ArrayListOperations implements IIterable {
         return index >= 0 ? index : -1;
     }
 
-    @Override
     public int finalValue() {
         return list.get(list.size() - 1);
     }

@@ -1,11 +1,15 @@
 class ArrayOperations implements IIterable {
     private int[] array;
     private boolean sorted = false;
+    private int size;
+    private int cap;
 
     public ArrayOperations(int size) {
         if (size <= 0)
             throw new IllegalArgumentException("Invalid array size");
-        array = new int[size];
+        this.size = size;
+        this.cap = size + 100; // Extra capacity for insertions
+        array = new int[cap];
         for (int i = 0; i < size; i++) {
             // Fill with random numbers [0, 100]
             array[i] = (int) (Math.random() * 100);
@@ -14,32 +18,35 @@ class ArrayOperations implements IIterable {
 
     @Override
     public void traverse() {
-        for (int v : array) {
-            System.out.printf("%d ", v);
+        for (int i = 0; i < size; i++) {
+            System.out.print(array[i] + " ");
         }
         System.out.println();
     }
 
     @Override
     public void suppressedTraverse() {
-        for (int _ : array) {
+        for (int i = 0; i < size; i++) {
             // no-op
         }
     }
 
+    private void resize() {
+        cap += 100;
+        int[] newArray = new int[cap];
+        System.arraycopy(array, 0, newArray, 0, size);
+        array = newArray;
+    }
+
     @Override
     public void insert(int index, int v) {
-        if (index < 0 || index > array.length)
+        if (index < 0 || index > size)
             throw new ArrayIndexOutOfBoundsException("Index out of bounds");
-
-        // Clone array with increased size
-        int[] newArray = new int[array.length + 1];
-        System.arraycopy(array, 0, newArray, 0, index);
-        // Stop clone at index and insert value
-        newArray[index] = v;
-        // Clone the rest of the array
-        System.arraycopy(array, index, newArray, index + 1, array.length - index);
-        array = newArray;
+        if (size >= cap)
+            resize();
+        System.arraycopy(array, index, array, index + 1, size - index);
+        array[index] = v;
+        size++;
 
         // Due to arbitrary insertion,
         // the array is no longer guaranteed to be sorted
@@ -48,15 +55,10 @@ class ArrayOperations implements IIterable {
 
     @Override
     public void delete(int index) {
-        if (index < 0 || index >= array.length)
+        if (index < 0 || index >= size)
             throw new ArrayIndexOutOfBoundsException("Index out of bounds");
 
-        // Clone array with decreased size
-        int[] newArray = new int[array.length - 1];
-        System.arraycopy(array, 0, newArray, 0, index);
-        // Skip the deleted index
-        System.arraycopy(array, index + 1, newArray, index, array.length - index - 1);
-        array = newArray;
+        array[--size] = 0;
 
         // Deletion should not change the order of elements
         // No change to this.sorted
@@ -66,20 +68,15 @@ class ArrayOperations implements IIterable {
     public void smartInsert(int v) {
         if (!sorted)
             sort();
-        int[] newArray = new int[array.length + 1];
+        if (size >= cap)
+            resize();
         int i = 0;
-        // Manual iteration to both copy and compare values
-        // Can not use arraycopy because we need to find the correct position for
-        // insertion
-        while (i < array.length && array[i] < v) {
-            newArray[i] = array[i];
+        while (i < size && array[i] < v) {
             i++;
         }
-        newArray[i] = v;
-        // Use arraycopy for the rest of the array
-        System.arraycopy(array, i, newArray, i + 1, array.length - i);
-        array = newArray;
-
+        System.arraycopy(array, i, array, i + 1, size - i);
+        array[i] = v;
+        size++;
         // Array is guaranteed to be sorted
         sorted = true;
     }
@@ -95,7 +92,7 @@ class ArrayOperations implements IIterable {
 
     @Override
     public int linearSearch(int v) {
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < size; i++) {
             if (array[i] == v) {
                 return i;
             }
@@ -105,6 +102,8 @@ class ArrayOperations implements IIterable {
 
     @Override
     public int binarySearch(int v) {
+        if (!sorted)
+            sort();
         // Uses java.util.Arrays
         int index = java.util.Arrays.binarySearch(array, v);
         return index >= 0 ? index : -1;
@@ -112,6 +111,6 @@ class ArrayOperations implements IIterable {
 
     @Override
     public int finalValue() {
-        return array[array.length - 1];
+        return array[size - 1];
     }
 }

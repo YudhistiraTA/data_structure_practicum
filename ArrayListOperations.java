@@ -7,7 +7,7 @@ class ArrayListOperations implements IIterable {
     public ArrayListOperations(int size) {
         if (size <= 0)
             throw new IllegalArgumentException("Invalid list size");
-        list = new java.util.ArrayList<>(size);
+        list = new java.util.ArrayList<>(size + 100); // Extra capacity for insertions
         for (int i = 0; i < size; i++) {
             // Fill with random numbers [0, 100]
             list.add((int) (Math.random() * 100));
@@ -83,6 +83,8 @@ class ArrayListOperations implements IIterable {
 
     @Override
     public int binarySearch(int v) {
+        if (!sorted)
+            sort();
         int index = java.util.Collections.binarySearch(list, v);
         return index >= 0 ? index : -1;
     }

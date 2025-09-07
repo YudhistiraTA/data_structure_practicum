@@ -1,3 +1,4 @@
+import java.util.Arrays;
 
 class Comparison {
     private static enum TestType {
@@ -89,13 +90,14 @@ class Comparison {
         results = new UnitTest[sizes.length][StructureType.values().length];
         for (int i = 0; i < sizes.length; i++)
             for (int j = 0; j < StructureType.values().length; j++)
-                results[i][j] = new UnitTest(sizes[i], runs, StructureType.values()[j]).run();
+                results[i][j] = new UnitTest(sizes[i], runs, StructureType.values()[j]);
     }
 
     public Comparison run() {
-        for (int i = 0; i < results.length; i++)
-            for (int j = 0; j < results[i].length; j++)
-                results[i][j].run();
+        Arrays.stream(results)
+                .flatMap(Arrays::stream)
+                .parallel()
+                .forEach(UnitTest::run);
         return this;
     }
 
